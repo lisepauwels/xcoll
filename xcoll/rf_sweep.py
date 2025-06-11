@@ -18,46 +18,46 @@ class RFSweep:
         self._install_zeta_shift()
 
     def _get_base_frequency(self):
-        self.cavities = self.line.get_elements_of_type(xt.Cavity)[1]
-        freq = np.unique([round(self.line[cav].frequency, 9) for cav in self.cavities])
-        if len(freq) > 1:
-            raise NotImplementedError(f"Cannot sweep multiple cavities with different frequencies!")
-        elif abs(freq[0]) < 1e-9 :
-            raise ValueError(f"Cavity frequency not set!")
-        self.f_RF = freq[0]
-        phi = np.unique(np.array([self.line[cav].lag for cav in self.cavities])*np.pi/180.)
-        if len(phi) > 1:
-            raise NotImplementedError(f"Cannot sweep multiple cavities with different phases!")
-        self.phi = phi[0]
-        self.V = np.array([self.line[cav].voltage for cav in self.cavities]).sum()
-        self.L = self.line.get_length()
-        # cavities_all = self.line.get_elements_of_type(xt.Cavity)[1]
-        # freq_all = np.unique([round(self.line[cav].frequency, 9) for cav in cavities_all])
-
-        # if len(freq_all) > 1:
-        #     # raise NotImplementedError(f"Cannot sweep multiple cavities with different frequencies!")
-        #     print("Cannot sweep multiple cavities with different frequencies! Choosing lowest non-zero frequency to sweep...")
-        #     if freq_all[0] > 0:
-        #         freq = freq_all[0]
-        #     else:
-        #         freq = freq_all[1]
-        #     self.cavities = [cav for cav in cavities_all if round(self.line[cav].frequency, 9)==freq]
-        #     self.f_RF = freq
-
-
+        # self.cavities = self.line.get_elements_of_type(xt.Cavity)[1]
+        # freq = np.unique([round(self.line[cav].frequency, 9) for cav in self.cavities])
+        # if len(freq) > 1:
+        #     raise NotImplementedError(f"Cannot sweep multiple cavities with different frequencies!")
         # elif abs(freq[0]) < 1e-9 :
         #     raise ValueError(f"Cavity frequency not set!")
-
-        # else:
-        #     self.cavities = self.line.get_elements_of_type(xt.Cavity)[1]
-        #     freq = np.unique([round(self.line[cav].frequency, 9) for cav in self.cavities])
-        #     self.f_RF = freq[0]
+        # self.f_RF = freq[0]
         # phi = np.unique(np.array([self.line[cav].lag for cav in self.cavities])*np.pi/180.)
         # if len(phi) > 1:
         #     raise NotImplementedError(f"Cannot sweep multiple cavities with different phases!")
         # self.phi = phi[0]
         # self.V = np.array([self.line[cav].voltage for cav in self.cavities]).sum()
         # self.L = self.line.get_length()
+        cavities_all = self.line.get_elements_of_type(xt.Cavity)[1]
+        freq_all = np.unique([round(self.line[cav].frequency, 9) for cav in cavities_all])
+
+        if len(freq_all) > 1:
+            # raise NotImplementedError(f"Cannot sweep multiple cavities with different frequencies!")
+            print("Cannot sweep multiple cavities with different frequencies! Choosing lowest non-zero frequency to sweep...")
+            if freq_all[0] > 0:
+                freq = freq_all[0]
+            else:
+                freq = freq_all[1]
+            self.cavities = [cav for cav in cavities_all if round(self.line[cav].frequency, 9)==freq]
+            self.f_RF = freq
+
+
+        elif abs(freq[0]) < 1e-9 :
+            raise ValueError(f"Cavity frequency not set!")
+
+        else:
+            self.cavities = self.line.get_elements_of_type(xt.Cavity)[1]
+            freq = np.unique([round(self.line[cav].frequency, 9) for cav in self.cavities])
+            self.f_RF = freq[0]
+        phi = np.unique(np.array([self.line[cav].lag for cav in self.cavities])*np.pi/180.)
+        if len(phi) > 1:
+            raise NotImplementedError(f"Cannot sweep multiple cavities with different phases!")
+        self.phi = phi[0]
+        self.V = np.array([self.line[cav].voltage for cav in self.cavities]).sum()
+        self.L = self.line.get_length()
 
 
 
