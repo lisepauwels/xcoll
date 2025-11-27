@@ -21,24 +21,24 @@ def _plot_lossmap_base(lossmap: dict, *, norm="total", ax=None, xlim=None, ylim=
     coll_s = lossmap['collimator']['s']
     coll_val = lossmap['collimator']['e'] if energy else lossmap['collimator']['n']
     if lossmap['interpolation']:
-        cold_s = lossmap['aperture']['s_bins']
-        cold_val = lossmap['aperture']['e_bins'] if energy else lossmap['aperture']['n_bins']
+        warm_s = lossmap['aperture']['s_bins']
+        warm_val = lossmap['aperture']['e_bins'] if energy else lossmap['aperture']['n_bins']
     else:
-        cold_s = lossmap['aperture']['s']
-        cold_val = lossmap['aperture']['e'] if energy else lossmap['aperture']['n']
-    warm_s = np.array([])  # Placeholder for warm losses, if needed
-    warm_val = np.array([])  # Placeholder for warm losses, if needed
+        warm_s = lossmap['aperture']['s']
+        warm_val = lossmap['aperture']['e'] if energy else lossmap['aperture']['n']
+    cold_s = np.array([])  # Placeholder for warm losses, if needed
+    cold_val = np.array([])  # Placeholder for warm losses, if needed
     if norm != "raw":
         if lossmap['interpolation']:
-            cold_val = cold_val / lossmap['interpolation']
-            # warm_val = warm_val / lossmap['interpolation']
+            # cold_val = cold_val / lossmap['interpolation']
+            warm_val = warm_val / lossmap['interpolation']
         coll_val = coll_val / lossmap['collimator']['length']
         if norm == "total":
             scale = coll_val.sum() + cold_val.sum() + warm_val.sum()
         elif norm == "coll_max":
             scale = coll_val.max()
         elif norm == "max":
-            scale = max(coll_val.max(), cold_val.max(), warm_val.max())
+            scale = warm_val.max()
         elif norm == "none":
             scale = 1
         else:
@@ -47,11 +47,11 @@ def _plot_lossmap_base(lossmap: dict, *, norm="total", ax=None, xlim=None, ylim=
         cold_val = cold_val / scale
         warm_val = warm_val / scale
         if lossmap['interpolation']:
-            cold_val = cold_val / lossmap['aperture']['length_bins']
+            warm_val = warm_val / lossmap['aperture']['length_bins']
 
     L = lossmap['machine_length']
     xlim = xlim if xlim else [-0.01*L, 1.01*L]
-    ylim = ylim if ylim else [1.e-7, 1.e1]
+    ylim = ylim if ylim else [1.e-7, 2.e1]
 
     font = {'family': 'serif', 'size': 17}
     format_dict = {f"font.{prop}": font[prop] for prop in font}
@@ -64,8 +64,8 @@ def _plot_lossmap_base(lossmap: dict, *, norm="total", ax=None, xlim=None, ylim=
 
         bar_common_kwargs = dict(width = 0.8, lw = 1, bottom = 1.e-9)
         ax.bar(coll_s, coll_val, color="k", edgecolor="k", label="Collimator", zorder=10, **bar_common_kwargs)
-        ax.bar(cold_s, cold_val, color="b", edgecolor="b", label="Cold",  zorder=11, **bar_common_kwargs)
-        # ax.bar(warm_s, warm_val, color="r", edgecolor="r", label="Warm",  zorder=12, **bar_common_kwargs)
+        # ax.bar(cold_s, cold_val, color="b", edgecolor="b", label="Cold",  zorder=11, **bar_common_kwargs)
+        ax.bar(warm_s, warm_val, color="r", edgecolor="r", label="Warm",  zorder=12, **bar_common_kwargs)
 
         ax.set_yscale("log")
         ax.set_ylim(ylim)

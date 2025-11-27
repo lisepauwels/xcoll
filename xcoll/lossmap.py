@@ -483,7 +483,7 @@ class LossMap:
                 raise ValueError("The JSON file does not contain the collimator type data.")
         if 'aperture' not in lossmap:
             raise ValueError("The JSON file does not contain the aperture data.")
-        if is_new_format and lossmap['interpolation'] is not None:
+        if is_new_format and lossmap['interpolation']:
             if 'idx_bins' not in lossmap['aperture']:
                 raise ValueError("The JSON file does not contain the aperture idx_bins data.")
             if 'n_bins' not in lossmap['aperture']:
@@ -500,8 +500,8 @@ class LossMap:
             if is_new_format:
                 if 'e' not in lossmap['aperture']:
                     raise ValueError("The JSON file does not contain the aperture e data.")
-                if 'length' not in lossmap['aperture']:
-                    raise ValueError("The JSON file does not contain the aperture length data.")
+                # if 'length' not in lossmap['aperture']:
+                #     raise ValueError("The JSON file does not contain the aperture length data.")
         return is_new_format
 
 
