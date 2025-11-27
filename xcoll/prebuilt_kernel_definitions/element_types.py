@@ -14,7 +14,10 @@ DEFAULT_XCOLL_ELEMENTS = [
     EverestBlock,
     EverestCollimator,
     EverestCrystal,
+    # Geant4Collimator,
     BlowUp,
     # ParticleStatsMonitor,
     EmittanceMonitor
 ]
+
+EXTRA_XCOLL_ELEMENTS = []
